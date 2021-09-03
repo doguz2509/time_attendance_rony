@@ -2,15 +2,31 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import sys
+from typing import Tuple, AnyStr
+
+from ui import UI
+
+DATA_FILE_PATH = r'.\data.json'
+ENTER_MENU = '1. SignIn\n2. SignUp\n3. Exit', 3
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    menu: Tuple[AnyStr, int] = ENTER_MENU
+
+    while True:
+        with UI(DATA_FILE_PATH) as dm:
+            input_ = input(menu[0])
+            try:
+                selection = int(input_)
+                assert 1 <= selection < 3, "Incorrect selection"
+                if selection == menu[1]:
+                    print("Exiting")
+                    break
+                elif selection == 1:
+                    menu = dm.select_user()
+            except Exception as e:
+                print(f"{e}")
+                sys.exit(-1)
+
